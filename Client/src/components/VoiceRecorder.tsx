@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
-import { Mic, MicOff, Loader2 } from "lucide-react";
+import { Mic, Square, Loader2 } from "lucide-react";
 import 'regenerator-runtime/runtime';
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
+import { cn } from "@/lib/utils";
 
 export function VoiceRecorder({ onTranscriptionComplete }: { onTranscriptionComplete: (text: string) => void }) {
     const [isProcessing, setIsProcessing] = useState(false);
@@ -15,14 +16,13 @@ export function VoiceRecorder({ onTranscriptionComplete }: { onTranscriptionComp
     } = useSpeechRecognition();
 
     useEffect(() => {
-        // If stopped listening and we have a transcript, send it up
         if (!listening && transcript) {
             handleStop();
         }
-    }, [listening, transcript]);
+    }, [listening]);
 
     if (!browserSupportsSpeechRecognition) {
-        return <span>Browser doesn't support speech recognition.</span>;
+        return null; // Quietly hide if not supported
     }
 
     const toggleRecording = () => {
@@ -35,9 +35,9 @@ export function VoiceRecorder({ onTranscriptionComplete }: { onTranscriptionComp
     };
 
     const handleStop = () => {
+        if (!transcript) return;
+
         setIsProcessing(true);
-        // Simulate "processing" or cleaning up text via LLM if needed
-        // For now, we just pass the raw transcript
         setTimeout(() => {
             onTranscriptionComplete(transcript);
             setIsProcessing(false);
@@ -46,23 +46,24 @@ export function VoiceRecorder({ onTranscriptionComplete }: { onTranscriptionComp
     };
 
     return (
-        <div className="flex items-center gap-2">
-            <Button
-                variant={listening ? "destructive" : "secondary"}
-                size="icon"
-                onClick={toggleRecording}
-                disabled={isProcessing}
-            >
-                {isProcessing ? (
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                ) : listening ? (
-                    <MicOff className="h-4 w-4" />
-                ) : (
-                    <Mic className="h-4 w-4" />
-                )}
-            </Button>
-            {listening && <span className="text-sm text-red-500 animate-pulse">Recording...</span>}
-            {isProcessing && <span className="text-sm text-muted-foreground">Processing...</span>}
-        </div>
+        <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleRecording}
+            disabled={isProcessing}
+            className={cn(
+                "rounded-full transition-all duration-300",
+                listening ? "bg-red-500 hover:bg-red-600 text-white shadow-lg shadow-red-500/30 scale-110" : "text-muted-foreground hover:text-foreground hover:bg-muted"
+            )}
+            title={listening ? "Stop Recording" : "Start Dictation"}
+        >
+            {isProcessing ? (
+                <Loader2 className="h-4 w-4 animate-spin" />
+            ) : listening ? (
+                <Square className="h-3 w-3 fill-current" />
+            ) : (
+                <Mic className="h-4 w-4" />
+            )}
+        </Button>
     );
 }
