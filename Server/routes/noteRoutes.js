@@ -45,7 +45,10 @@ router.post('/mindmap', async (req, res) => {
         res.json(JSON.parse(cleanText));
     } catch (error) {
         console.error('Error generating mind map:', error);
-        res.status(500).json({ error: 'Failed to generate mind map' });
+        if (error.response) {
+            console.error('Response Error Data:', await error.response.text());
+        }
+        res.status(500).json({ error: 'Failed to generate mind map', details: error.message });
     }
 });
 router.route('/:id').get(getNoteById).put(updateNote).delete(deleteNote);

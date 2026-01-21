@@ -22,8 +22,10 @@
     "dotenv": "^17.2.3",
     "express": "^5.2.1",
     "langchain": "^1.2.10",
+    "mammoth": "^1.11.0",
     "mongoose": "^9.1.4",
     "multer": "^2.0.2",
-    "openai": "^6.16.0"
+    "openai": "^6.16.0",
+    "pdf-parse": "^1.1.1"
   }
 }

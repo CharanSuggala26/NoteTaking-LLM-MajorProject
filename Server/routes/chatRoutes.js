@@ -24,7 +24,7 @@ router.post("/", async (req, res) => {
     temperature: 0.7,
     topP: 0.5,
   });
-  res.json({ response: response.text });
+  res.json({ response: response.text});
 });
 
 module.exports = router;

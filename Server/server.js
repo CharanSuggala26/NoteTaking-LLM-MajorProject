@@ -15,6 +15,8 @@ app.use(express.json());
 // Routes
 app.use('/api/notes', require('./routes/noteRoutes'));
 app.use('/api/chat', require('./routes/chatRoutes'));
+app.use('/api/upload', require('./routes/uploadRoutes'));
+app.use('/api/podcast', require('./routes/podcastRoutes'));
 
 const PORT = process.env.PORT || 5000;
 

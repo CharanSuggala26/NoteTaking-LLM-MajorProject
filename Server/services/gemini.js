@@ -5,7 +5,7 @@ require('dotenv').config();
 const genAI = new GoogleGenerativeAI(process.env.GOOGLE_API_KEY);
 
 // Configuration
-const MODEL_NAME = "gemini-2.0-flash-lite"; // Generic Lite model
+const MODEL_NAME = "gemini-2.0-flash-lite"; // Lighter model to avoid rate limits
 const EMBEDDING_MODEL = "text-embedding-004";
 
 const geminiService = {
@@ -24,11 +24,11 @@ const geminiService = {
     },
 
     // Generate Content (MindMap, Chat, etc.)
-    generateText: async (prompt) => {
+    generateText: async (prompt, modelName = MODEL_NAME) => {
         try {
             if (!process.env.GOOGLE_API_KEY) throw new Error("API Key missing");
 
-            const model = genAI.getGenerativeModel({ model: MODEL_NAME });
+            const model = genAI.getGenerativeModel({ model: modelName });
             const result = await model.generateContent(prompt);
             return result.response.text();
         } catch (error) {

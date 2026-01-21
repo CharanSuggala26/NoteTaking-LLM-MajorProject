@@ -3,10 +3,12 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Plus, Tag, Loader2, Trash2, Pencil, X, Network } from "lucide-react";
+import { Plus, Tag, Loader2, Trash2, Pencil, Mic } from "lucide-react";
 import { VoiceRecorder } from "@/components/VoiceRecorder";
 import { Input } from "@/components/ui/input";
 import { MindMapDialog } from "@/components/MindMapDialog";
+import { PodcastDialog } from "@/components/PodcastDialog";
+import { FileUpload } from "@/components/FileUpload";
 
 // API Base URL
 const API_URL = 'http://localhost:5000/api/notes';
@@ -84,6 +86,10 @@ export default function Notes() {
         setContent((prev) => prev + (prev ? " " : "") + text);
     };
 
+    const handleFileUpload = (text: string) => {
+        setContent((prev) => prev + (prev ? "\n\n" : "") + text);
+    };
+
     const handleSubmit = () => {
         if (!title || !content) return;
 
@@ -142,7 +148,10 @@ export default function Notes() {
                             onChange={(e) => setContent(e.target.value)}
                         />
                         <div className="flex items-center justify-between">
-                            <VoiceRecorder onTranscriptionComplete={handleTranscription} />
+                            <div className="flex gap-2">
+                                <VoiceRecorder onTranscriptionComplete={handleTranscription} />
+                                <FileUpload onUploadComplete={handleFileUpload} />
+                            </div>
                             <div className="flex gap-2">
                                 <Button variant="ghost" onClick={resetForm}>Cancel</Button>
                                 <Button onClick={handleSubmit} disabled={isPending}>
@@ -169,9 +178,17 @@ export default function Notes() {
                                         <MindMapDialog
                                             noteId={note._id}
                                             content={note.content}
+                                        />
+                                    </div>
+                                    {/* Podcast Button */}
+                                    <div onClick={(e) => e.stopPropagation()}>
+                                        <PodcastDialog
+                                            noteId={note._id}
+                                            title={note.title}
+                                            content={note.content}
                                             trigger={
-                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-blue-500" title="Generate Mind Map">
-                                                    <Network className="h-4 w-4" />
+                                                <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-purple-500" title="Listen to Podcast">
+                                                    <Mic className="h-4 w-4" />
                                                 </Button>
                                             }
                                         />
