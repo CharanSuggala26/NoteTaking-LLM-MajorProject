@@ -1,0 +1,16 @@
+node_modules
+.env
+.DS_Store
+.vscode
+coverage
+dist
+npm-debug.log
+
+# Ignore generated mind map files
+*.mindmap.json  
+# Ignore temporary files
+*.tmp
+*.temp  
+
+# Ignore log files
+logs
