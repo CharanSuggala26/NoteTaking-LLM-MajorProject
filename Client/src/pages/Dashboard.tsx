@@ -67,16 +67,16 @@ export default function Dashboard() {
                 <motion.div variants={item}>
                     <Card className="bg-gradient-to-br from-blue-50 to-indigo-50 dark:from-blue-950/20 dark:to-indigo-950/20 border-none shadow-sm">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-blue-700 dark:text-blue-300">Total Knowledge</CardTitle>
-                            <FileText className="h-4 w-4 text-blue-700 dark:text-blue-300 opacity-70" />
+                            <CardTitle className="text-sm font-medium dark:from-blue-950/20 dark:from-blue-950/20">Total Knowledge</CardTitle>
+                            <FileText className="h-4 w-4 dark:from-blue-950/20 dark:from-blue-950/20 opacity-70" />
                         </CardHeader>
                         <CardContent>
                             {isLoading ? (
                                 <Loader2 className="h-8 w-8 animate-spin text-blue-600" />
                             ) : (
-                                <div className="text-3xl font-bold text-blue-900 dark:text-blue-100">{totalNotes}</div>
+                                <div className="text-3xl font-bold dark:from-blue-950/20 dark:from-blue-950/20">{totalNotes}</div>
                             )}
-                            <p className="text-xs text-blue-600/80 dark:text-blue-400 mt-1">Notes in your second brain</p>
+                            <p className="text-xs dark:from-blue-950/20 dark:from-blue-950/20 mt-1">Notes in your second brain</p>
                         </CardContent>
                     </Card>
                 </motion.div>
@@ -84,12 +84,12 @@ export default function Dashboard() {
                 <motion.div variants={item}>
                     <Card className="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-950/20 dark:to-pink-950/20 border-none shadow-sm">
                         <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                            <CardTitle className="text-sm font-medium text-purple-700 dark:text-purple-300">AI Interactions</CardTitle>
-                            <Sparkles className="h-4 w-4 text-purple-700 dark:text-purple-300 opacity-70" />
+                            <CardTitle className="text-sm font-medium dark:from-blue-950/20 dark:from-blue-950/20">AI Interactions</CardTitle>
+                            <Sparkles className="h-4 w-4 dark:from-blue-950/20 dark:from-blue-950/20 opacity-70" />
                         </CardHeader>
                         <CardContent>
-                            <div className="text-3xl font-bold text-purple-900 dark:text-purple-100">Ready</div>
-                            <p className="text-xs text-purple-600/80 dark:text-purple-400 mt-1">Chat assistant online</p>
+                            <div className="text-3xl font-bold dark:from-blue-950/20 dark:from-blue-950/20">Ready</div>
+                            <p className="text-xs dark:from-blue-950/20 dark:from-blue-950/20 mt-1">Chat assistant online</p>
                         </CardContent>
                     </Card>
                 </motion.div>
