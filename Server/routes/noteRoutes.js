@@ -54,3 +54,7 @@ router.post('/mindmap', async (req, res) => {
 router.route('/:id').get(getNoteById).put(updateNote).delete(deleteNote);
 
 module.exports = router;
+
+
+
+
