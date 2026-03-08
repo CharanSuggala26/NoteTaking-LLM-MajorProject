@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mern-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mern-backend
+  template:
+    metadata:
+      labels:
+        app: mern-backend
+    spec:
+      containers:
+      - name: mern-backend
+        image: mernacr123.azurecr.io/mern-backend:v1
+        ports:
+        - containerPort: 5000
+        env:
+        - name: MONGO_URI
+          value: mongodb+srv://suggalasaicharan789:Saicharan18@cluster0.zpo87.mongodb.net/?appName=Cluster0
+         

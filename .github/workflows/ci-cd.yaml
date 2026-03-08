@@ -1,0 +1,50 @@
+name: MERN CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Login to Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Build backend Docker image
+      run: |
+        cd server
+        docker build -t mernacr123.azurecr.io/mern-backend:v1 .
+        echo ${{ secrets.AZURE_CREDENTIALS }} | docker login mernacr123.azurecr.io --username $(jq -r .clientId) --password-stdin
+        docker push mernacr123.azurecr.io/mern-backend:v1
+
+    - name: Build frontend Docker image
+      run: |
+        cd client
+        docker build -t mernacr123.azurecr.io/mern-frontend:v1 .
+        echo ${{ secrets.AZURE_CREDENTIALS }} | docker login mernacr123.azurecr.io --username $(jq -r .clientId) --password-stdin
+        docker push mernacr123.azurecr.io/mern-frontend:v1
+
+    - name: Set up kubectl
+      uses: azure/aks-set-context@v2
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        cluster-name: mern-aks-cluster
+        resource-group: mern-aks-rg
+
+    - name: Deploy to AKS
+      run: |
+        kubectl apply -f k8s/backend-deployment.yaml
+        kubectl apply -f k8s/frontend-deployment.yaml
