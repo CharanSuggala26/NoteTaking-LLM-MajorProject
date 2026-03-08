@@ -17,3 +17,16 @@ spec:
         image: mernacr123.azurecr.io/mern-frontend:v1
         ports:
         - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mern-frontend-service
+spec:
+  selector:
+    app: mern-frontend
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 80        

@@ -1,0 +1,59 @@
+name: CI/CD to AKS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      #  Login to Azure
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      #  Build and push backend Docker image
+      - name: Build and push backend image
+        run: |
+          docker build -t mernacr123.azurecr.io/mern-backend:v1 ./server
+          docker push mernacr123.azurecr.io/mern-backend:v1
+
+      #  Build and push frontend Docker image
+      - name: Build and push frontend image
+        run: |
+          docker build -t mernacr123.azurecr.io/mern-frontend:v1 ./client
+          docker push mernacr123.azurecr.io/mern-frontend:v1
+
+      #  Set up kubectl
+      - name: Set up kubectl
+        uses: azure/setup-kubectl@v3
+        with:
+          version: '1.28.0'
+
+      # Get AKS credentials
+      - name: Get AKS credentials
+        run: |
+          az aks get-credentials --resource-group mern-aks-rg --name mern-aks-cluster
+
+      # Deploy backend
+      - name: Deploy backend to AKS
+        run: |
+          kubectl apply -f ./k8s/backend-deployment.yaml
+
+      # Deploy frontend
+      - name: Deploy frontend to AKS
+        run: |
+          kubectl apply -f ./k8s/frontend-deployment.yaml
+
+      # Applying ingress
+      - name: Apply ingress
+        run: |
+          kubectl apply -f ./k8s/ingress.yaml
